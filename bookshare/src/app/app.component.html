@@ -1,0 +1,25 @@
+<nav class="navbar">
+  <div class="nav-brand">
+    <a routerLink="/">{{ title }}</a>
+  </div>
+  
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="/catalog" routerLinkActive="active">Catalog</a>
+  </div>
+
+  <div class="nav-auth">
+    <ng-container *ngIf="authService.user$ | async as user; else guestLinks">
+      <span class="user-email">{{ user.email }}</span>
+      <button (click)="logout()" class="logout-btn">Logout</button>
+    </ng-container>
+    <ng-template #guestLinks>
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/register" routerLinkActive="active">Register</a>
+    </ng-template>
+  </div>
+</nav>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main> 
