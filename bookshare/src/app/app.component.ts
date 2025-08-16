@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { HeaderComponent } from './core/header.component/header.component';
@@ -8,8 +8,12 @@ import { HeaderComponent } from './core/header.component/header.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
-imports: [RouterOutlet,  HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent],
 })
-export class AppComponent {
-  
+export class AppComponent implements OnInit {
+  title: string = 'BookShare';
+
+  ngOnInit() {
+    console.log('AppComponent ngOnInit');
+  }
 }
