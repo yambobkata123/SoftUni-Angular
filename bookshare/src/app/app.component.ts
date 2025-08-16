@@ -1,18 +1,15 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from './core/services/auth.service';
-import { Router } from '@angular/router';
+
+import { HeaderComponent } from './core/header.component/header.component';
 
 @Component({
-  selector: 'root',
+  selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+imports: [RouterOutlet,  HeaderComponent],
 })
 export class AppComponent {
-  title = 'BookShare';
-  constructor(public authService: AuthService, private router: Router) {}
-  logout() { this.authService.logout(); }
+  
 }
