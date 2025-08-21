@@ -1,10 +1,15 @@
 <div class="home-container">
   <div class="hero-section">
-<h1>Welcome to BookShare</h1>
+    <h1>Welcome to BookShare</h1>
     <p class="hero-subtitle">Discover, share, and connect through the world of books</p>
     <div class="hero-buttons">
       <a routerLink="/catalog" class="btn btn-primary">Browse Catalog</a>
-      <a routerLink="/register" class="btn btn-secondary">Join Now</a>
+      <ng-container *ngIf="!(authService.user$ | async); else loggedInUser">
+        <a routerLink="/register" class="btn btn-secondary">Join Now</a>
+      </ng-container>
+      <ng-template #loggedInUser>
+        <a routerLink="/catalog" class="btn btn-secondary">Add New Book</a>
+      </ng-template>
     </div>
   </div>
 
