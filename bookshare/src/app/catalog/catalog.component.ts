@@ -41,28 +41,40 @@ export class CatalogComponent implements OnInit {
   }
 
   loadBooks() {
-    // Mock data - in real app, this would load from Firebase
-    this.books = [
-      {
-        id: '1',
-        title: 'The Great Gatsby',
-        author: 'F. Scott Fitzgerald',
-        description: 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.',
-        imageUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400',
-        likes: [],
-        creatorId: 'user1'
-      },
-      {
-        id: '2',
-        title: 'To Kill a Mockingbird',
-        author: 'Harper Lee',
-        description: 'The story of young Scout Finch and her father Atticus in a racially divided Alabama town.',
-        imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400',
-        likes: [],
-        creatorId: 'user1'
-      }
-    ];
+    // Load books from localStorage or use default data
+    const savedBooks = localStorage.getItem('books');
+    if (savedBooks) {
+      this.books = JSON.parse(savedBooks);
+    } else {
+      // Default books if no saved data
+      this.books = [
+        {
+          id: '1',
+          title: 'The Great Gatsby',
+          author: 'F. Scott Fitzgerald',
+          description: 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.',
+          imageUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400',
+          likes: [],
+          creatorId: 'user1'
+        },
+        {
+          id: '2',
+          title: 'To Kill a Mockingbird',
+          author: 'Harper Lee',
+          description: 'The story of young Scout Finch and her father Atticus in a racially divided Alabama town.',
+          imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400',
+          likes: [],
+          creatorId: 'user1'
+        }
+      ];
+      // Save default books to localStorage
+      this.saveBooksToStorage();
+    }
     this.filterBooks();
+  }
+
+  saveBooksToStorage() {
+    localStorage.setItem('books', JSON.stringify(this.books));
   }
 
   filterBooks() {
@@ -86,6 +98,7 @@ export class CatalogComponent implements OnInit {
       };
 
       this.books.push(newBook);
+      this.saveBooksToStorage(); // Save to localStorage
       this.filterBooks();
       this.bookForm.reset();
       this.showAddForm = false;
@@ -104,6 +117,8 @@ export class CatalogComponent implements OnInit {
     } else {
       book.likes = [...likes, userId];
     }
+    
+    this.saveBooksToStorage(); // Save to localStorage after like toggle
   }
 
   isLiked(book: IBook): boolean {
