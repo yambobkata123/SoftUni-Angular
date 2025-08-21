@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 import { IBook } from '../shared/interfaces/book';
@@ -16,6 +16,8 @@ export class CatalogComponent implements OnInit {
   filteredBooks: IBook[] = [];
   searchTerm: string = '';
   showAddForm: boolean = false;
+  showDetailsModal: boolean = false;
+  selectedBook: IBook | null = null;
   bookForm: FormGroup;
   currentUser: any;
 
@@ -46,9 +48,9 @@ export class CatalogComponent implements OnInit {
         title: 'The Great Gatsby',
         author: 'F. Scott Fitzgerald',
         description: 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.',
-        imageUrl: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400',
+        imageUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400',
         likes: [],
-        creatorId: 'mock-user'
+        creatorId: 'user1'
       },
       {
         id: '2',
@@ -57,7 +59,7 @@ export class CatalogComponent implements OnInit {
         description: 'The story of young Scout Finch and her father Atticus in a racially divided Alabama town.',
         imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400',
         likes: [],
-        creatorId: 'mock-user'
+        creatorId: 'user1'
       }
     ];
     this.filterBooks();
@@ -109,8 +111,13 @@ export class CatalogComponent implements OnInit {
   }
 
   viewDetails(book: IBook) {
-    // Implement book details view
-    console.log('View details for:', book);
+    this.selectedBook = book;
+    this.showDetailsModal = true;
+  }
+
+  closeDetailsModal() {
+    this.showDetailsModal = false;
+    this.selectedBook = null;
   }
 
   closeModal() {
