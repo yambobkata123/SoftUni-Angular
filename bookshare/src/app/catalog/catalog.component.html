@@ -71,4 +71,47 @@
       </form>
     </div>
   </div>
+
+  <!-- Book Details Modal -->
+  <div class="modal" *ngIf="showDetailsModal" (click)="closeDetailsModal()">
+    <div class="modal-content details-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Book Details</h3>
+        <button class="close-btn" (click)="closeDetailsModal()">&times;</button>
+      </div>
+      
+      <div class="book-details" *ngIf="selectedBook">
+        <div class="book-details-image">
+          <img [src]="selectedBook.imageUrl || 'assets/default-book.jpg'" [alt]="selectedBook.title">
+        </div>
+        
+        <div class="book-details-info">
+          <h2>{{ selectedBook.title }}</h2>
+          <p class="author-details">by {{ selectedBook.author }}</p>
+          <p class="description-details">{{ selectedBook.description }}</p>
+          
+          <div class="book-stats">
+            <div class="stat">
+              <span class="stat-label">Likes:</span>
+              <span class="stat-value">{{ selectedBook.likes.length || 0 }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Book ID:</span>
+              <span class="stat-value">{{ selectedBook.id }}</span>
+            </div>
+          </div>
+          
+          <div class="book-actions-details">
+            <button 
+              class="like-btn-details" 
+              [class.liked]="isLiked(selectedBook)"
+              (click)="toggleLike(selectedBook)"
+            >
+              ❤️ {{ selectedBook.likes.length || 0 }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
