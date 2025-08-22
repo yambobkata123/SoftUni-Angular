@@ -17,14 +17,3 @@ To use the application, follow these steps:
 3. Click the "Save" button to save the task.
 4. View the list of tasks by clicking the "Tasks" button.
 5. Edit or delete tasks as needed.
-## Code Structure
-The project is organized into the following components:
-* `app.component.html`: The main application component.
-* `app.component.ts`: The main application component.
-* `task.component.html`: The task component.
-* `task.component.ts`: The task component.
-* `task.service.ts`: The task service.
-## License
-This project is licensed under the MIT License.
-## Contact
-If you have any questions or suggestions, please contact me at [Email Support](mailto:yambobiyam@gmail.com).
