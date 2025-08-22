@@ -9,7 +9,7 @@
         <p class="author">by {{ book.author }}</p>
         <p class="description">{{ book.description }}</p>
         <div class="actions">
-          <button class="edit" (click)="openEdit(book)">Edit</button>
+          <a class="edit" [routerLink]="['/edit-book', book.id]">Edit</a>
           <button class="delete" (click)="deleteBook(book)">Delete</button>
           <!-- <button class="details" (click)="showDetailsModal">Details</button> -->
         </div>
@@ -22,7 +22,7 @@
   </ng-template>
 
   <!-- Edit Modal -->
-  <div class="modal" *ngIf="editingBook" (click)="cancelEdit()">
+  <!-- <div class="modal" *ngIf="editingBook" (click)="cancelEdit()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <button class="close-x" (click)="cancelEdit()">×</button>
       <h3>Edit Book</h3>
@@ -47,5 +47,5 @@
         <button type="button" class="primary" (click)="saveEdit()">Save</button>
       </div>
     </div>
-  </div>
+  </div> -->
 </div> 

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IBook } from '../shared/interfaces/book';
 import { AuthService } from '../core/services/auth.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-my-books',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './my-books.component.html',
   styleUrls: ['./my-books.component.css']
 })
