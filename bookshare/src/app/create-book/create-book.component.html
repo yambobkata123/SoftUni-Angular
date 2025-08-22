@@ -1,0 +1,67 @@
+<div class="create-book-page">
+  <div class="create-book-container">
+    <h2>Create New Book</h2>
+    
+    <form [formGroup]="bookForm" (ngSubmit)="addBook()" class="book-form">
+      <div class="form-group">
+        <label for="title">Title *</label>
+        <input 
+          id="title"
+          type="text" 
+          formControlName="title" 
+          placeholder="Enter book title"
+          required
+        >
+        <div class="error-message" *ngIf="bookForm.get('title')?.invalid && bookForm.get('title')?.touched">
+          Title is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="author">Author *</label>
+        <input 
+          id="author"
+          type="text" 
+          formControlName="author" 
+          placeholder="Enter author name"
+          required
+        >
+        <div class="error-message" *ngIf="bookForm.get('author')?.invalid && bookForm.get('author')?.touched">
+          Author is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description *</label>
+        <textarea 
+          id="description"
+          formControlName="description" 
+          placeholder="Enter book description"
+          rows="4"
+          required
+        ></textarea>
+        <div class="error-message" *ngIf="bookForm.get('description')?.invalid && bookForm.get('description')?.touched">
+          Description is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input 
+          id="imageUrl"
+          type="url" 
+          formControlName="imageUrl" 
+          placeholder="https://example.com/image.jpg"
+        >
+        <small class="help-text">Optional: Add a cover image URL</small>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!bookForm.valid">
+          Create Book
+        </button>
+      </div>
+    </form>
+  </div>
+</div> 
