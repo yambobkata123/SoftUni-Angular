@@ -9,6 +9,7 @@ import { SearchComponent } from './search/search.component';
 import { MyBooksComponent } from './my-books/my-books.component';
 import { CreateBookComponent } from './create-book/create-book.component';
 import { Notfound } from './notfound/notfound';
+import { EditBook } from './edit-book/edit-book';
 
 export const routes: Routes = [
   { path: '', redirectTo:'home', pathMatch: 'full'},
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'create-book', component: CreateBookComponent, canActivate: [AuthGuard] },
   { path: 'my-books', component: MyBooksComponent, canActivate: [AuthGuard] },
+  { path: 'edit-book/:id', component: EditBook }, // <- тук е важно :id
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [GuestGuard] },
   { path: '**', component: Notfound }
