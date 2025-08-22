@@ -4,12 +4,13 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule, F
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 import { IBook } from '../shared/interfaces/book';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,RouterLink]
 })
 export class CatalogComponent implements OnInit {
   books: IBook[] = [];
