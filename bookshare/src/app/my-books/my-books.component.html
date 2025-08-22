@@ -23,6 +23,7 @@
   <!-- Edit Modal -->
   <div class="modal" *ngIf="editingBook" (click)="cancelEdit()">
     <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-x" (click)="cancelEdit()">×</button>
       <h3>Edit Book</h3>
       <div class="form-group">
         <label>Title:</label>
