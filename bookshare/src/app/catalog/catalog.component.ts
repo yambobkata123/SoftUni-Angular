@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { IBook } from '../shared/interfaces/book';
 import { RouterLink } from '@angular/router';
@@ -10,29 +10,17 @@ import { RouterLink } from '@angular/router';
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule,RouterLink]
+  imports: [CommonModule, FormsModule,RouterLink]
 })
 export class CatalogComponent implements OnInit {
   books: IBook[] = [];
   filteredBooks: IBook[] = [];
   searchTerm: string = '';
-  showAddForm: boolean = false;
   showDetailsModal: boolean = false;
   selectedBook: IBook | null = null;
-  bookForm: FormGroup;
   currentUser: any;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService
-  ) {
-    this.bookForm = this.fb.group({
-      title: ['', Validators.required],
-      author: ['', Validators.required],
-      description: ['', Validators.required],
-      imageUrl: ['']
-    });
-  }
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadBooks();
@@ -89,23 +77,6 @@ export class CatalogComponent implements OnInit {
     }
   }
 
-  addBook() {
-    if (this.bookForm.valid && this.currentUser) {
-      const newBook: IBook = {
-        ...this.bookForm.value,
-        id: crypto.randomUUID(),
-        likes: [],
-        creatorId: this.currentUser.uid
-      };
-
-      this.books.push(newBook);
-      this.saveBooksToStorage(); // Save to localStorage
-      this.filterBooks();
-      this.bookForm.reset();
-      this.showAddForm = false;
-    }
-  }
-
   toggleLike(book: IBook) {
     if (!this.currentUser) return;
 
@@ -134,10 +105,5 @@ export class CatalogComponent implements OnInit {
   closeDetailsModal() {
     this.showDetailsModal = false;
     this.selectedBook = null;
-  }
-
-  closeModal() {
-    this.showAddForm = false;
-    this.bookForm.reset();
   }
 }
