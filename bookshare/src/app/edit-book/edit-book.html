@@ -1,0 +1,32 @@
+<div class="modal" *ngIf="editingBook">
+    <div class="modal-content">
+      <button class="close-x" (click)="cancelEdit()">×</button>
+      <h3>Edit Book</h3>
+  
+      <div class="form-group">
+        <label>Title:</label>
+        <input type="text" [(ngModel)]="editModel.title" name="title" />
+      </div>
+  
+      <div class="form-group">
+        <label>Author:</label>
+        <input type="text" [(ngModel)]="editModel.author" name="author" />
+      </div>
+  
+      <div class="form-group">
+        <label>Description:</label>
+        <textarea [(ngModel)]="editModel.description" name="description"></textarea>
+      </div>
+  
+      <div class="form-group">
+        <label>Image URL:</label>
+        <input type="text" [(ngModel)]="editModel.imageUrl" name="imageUrl" />
+      </div>
+  
+      <div class="form-actions">
+        <button type="button" (click)="cancelEdit()">Cancel</button>
+        <button type="button" class="primary" (click)="saveEdit()">Save</button>
+      </div>
+    </div>
+  </div>
+  
