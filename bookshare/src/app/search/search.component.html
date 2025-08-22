@@ -1,0 +1,21 @@
+<div class="search-page">
+  <h2>Search Books</h2>
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="query" (input)="onSearch()" placeholder="Search by title, author, or description..." />
+  </div>
+
+  <div class="results" *ngIf="results.length; else empty">
+    <div class="book-card" *ngFor="let book of results">
+      <img [src]="book.imageUrl || 'assets/default-book.jpg'" [alt]="book.title" />
+      <div class="info">
+        <h3>{{ book.title }}</h3>
+        <p class="author">by {{ book.author }}</p>
+        <p class="description">{{ book.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <p>No books found.</p>
+  </ng-template>
+</div> 

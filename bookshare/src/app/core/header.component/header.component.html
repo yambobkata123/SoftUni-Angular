@@ -8,6 +8,10 @@
       <div class="nav-links">
         <a routerLink="/">Home</a>
         <a routerLink="/catalog" routerLinkActive="active">Catalog</a>
+        <a routerLink="/search" routerLinkActive="active">Search</a>
+        <ng-container *ngIf="authService.user$ | async as user">
+          <a routerLink="/my-books" routerLinkActive="active">My Books</a>
+        </ng-container>
       </div>
       
       <div class="nav-auth">

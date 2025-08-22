@@ -29,7 +29,9 @@
             [class.liked]="isLiked(book)"
             (click)="toggleLike(book)"
           >
-            ❤️ {{ book.likes.length || 0 }}
+            <span class="icon">❤️</span>
+            <span class="label">Like</span>
+            <span class="count">{{ book.likes.length || 0 }}</span>
           </button>
           <button class="details-btn" (click)="viewDetails(book)">Details</button>
         </div>
@@ -103,11 +105,13 @@
           
           <div class="book-actions-details">
             <button 
-              class="like-btn-details" 
+              class="like-btn-details like-btn" 
               [class.liked]="isLiked(selectedBook)"
               (click)="toggleLike(selectedBook)"
             >
-              ❤️ {{ selectedBook.likes.length || 0 }}
+              <span class="icon">❤️</span>
+              <span class="label">Like</span>
+              <span class="count">{{ selectedBook.likes.length || 0 }}</span>
             </button>
           </div>
         </div>
