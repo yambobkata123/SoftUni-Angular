@@ -19,5 +19,5 @@ export class BookService {
     return this.http.post(`/api/themes/${bookId}/delete`,{bookId})
 }
 updateBook(bookId: string, book: IBook) {
-  return this.http.put(`/api/themes/${bookId}/edit`, book, { withCredentials: true });
+  return this.http.put(`/api/themes/${bookId}/edit`, book);
 }}
