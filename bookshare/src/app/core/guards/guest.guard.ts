@@ -11,7 +11,7 @@ export const GuestGuard: CanActivateFn = () => {
   return authService.user$.pipe(
       map(user => {
         if (!user) return true;
-      router.navigate(['/']);
+      router.navigate(['/catalog']);
         return false;
       })
     );

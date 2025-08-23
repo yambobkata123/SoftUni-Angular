@@ -17,7 +17,7 @@ export const isLoggedNot: CanActivateFn = () => {
   const router = inject(Router);
 
   if(localStorage.getItem('user')) {
-    return router.navigate(['/home']);
+    return router.navigate(['/catalog']);
 
   }
   return true;
