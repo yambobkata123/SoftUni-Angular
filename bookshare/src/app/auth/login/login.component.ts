@@ -1,44 +1,29 @@
 
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {  FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink]
+  imports: [ RouterLink,FormsModule]
 })
 export class LoginComponent {
-  form: FormGroup;
-  isLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder, 
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+    private router: Router,
+    private userservice: AuthService,
+  ) {}
 
-  async login() {
-    if (this.form.valid) {
-      this.isLoading = true;
-      try {
-    const { email, password } = this.form.value;
-        await this.authService.login(email, password);
-        this.router.navigate(['/catalog']);
-      } catch (error: any) {
-        console.error('Login error:', error);
-        alert(error.message || 'Login failed. Please try again.');
-      } finally {
-        this.isLoading = false;
-      }
-    }
+  login(form: NgForm) {
+    const {email,password}= form.value;
+    this.userservice.login(email, password).subscribe((data)=>{
+      localStorage.setItem('user', data._id);
+      this.router.navigate(['/home']);
+    })
+    
+    
   }
 }

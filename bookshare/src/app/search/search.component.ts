@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IBook } from '../shared/interfaces/book';
+import { BookService } from '../services/book.service';
 
 @Component({
   selector: 'app-search',
@@ -15,22 +16,28 @@ export class SearchComponent implements OnInit {
   results: IBook[] = [];
   allBooks: IBook[] = [];
 
+  constructor(private bookService: BookService) {}
+
   ngOnInit(): void {
-    const savedBooks = localStorage.getItem('books');
-    this.allBooks = savedBooks ? JSON.parse(savedBooks) : [];
-    this.results = [...this.allBooks];
+    this.loadBooks();
   }
 
-  onSearch() {
-    const q = this.query.trim().toLowerCase();
-    if (!q) {
-      this.results = [...this.allBooks];
-      return;
-    }
-    this.results = this.allBooks.filter(b =>
-      b.title.toLowerCase().includes(q) ||
-      b.author.toLowerCase().includes(q) ||
-      (b.description || '').toLowerCase().includes(q)
-    );
+  loadBooks(): void {
+    this.bookService.getAll().subscribe((books: IBook[]) => {
+      this.allBooks = books;
+      this.results = [...books];
+    });
   }
-} 
+
+  onSearch(): void {
+    const q = this.query.trim().toLowerCase();
+    if (q === '') {
+      this.results = [...this.allBooks];
+    } else {
+      this.results = this.allBooks.filter(book =>
+        book.title.toLowerCase().includes(q) ||
+        book.author.toLowerCase().includes(q)
+      );
+    }
+  }
+}

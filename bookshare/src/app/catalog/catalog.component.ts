@@ -2,108 +2,42 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../core/services/auth.service';
 import { IBook } from '../shared/interfaces/book';
-import { RouterLink } from '@angular/router';
+import { BookService } from '../services/book.service';
 
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterLink]
+  imports: [CommonModule, FormsModule]
 })
 export class CatalogComponent implements OnInit {
   books: IBook[] = [];
-  filteredBooks: IBook[] = [];
-  searchTerm: string = '';
-  showDetailsModal: boolean = false;
-  selectedBook: IBook | null = null;
-  currentUser: any;
+  query: string = '';
+  allBooks: IBook[] = [];
+  
 
-  constructor(private authService: AuthService) {}
+  constructor(private bookservice: BookService) {}
 
   ngOnInit(): void {
-    this.loadBooks();
-    this.authService.user$.subscribe(user => {
-      this.currentUser = user;
+    this.bookservice.getAll().subscribe((data) => {
+      this.allBooks = data;
+      this.books = [...data]; 
     });
   }
+  
 
-  loadBooks() {
-    // Load books from localStorage or use default data
-    const savedBooks = localStorage.getItem('books');
-    if (savedBooks) {
-      this.books = JSON.parse(savedBooks);
+  onSearch(): void {
+    const q = this.query?.trim().toLowerCase() || '';
+    if (q === '') {
+      this.books = [...this.allBooks]; 
     } else {
-      // Default books if no saved data
-      this.books = [
-        {
-          id: '1',
-          title: 'The Great Gatsby',
-          author: 'F. Scott Fitzgerald',
-          description: 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.',
-          imageUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400',
-          likes: [],
-          creatorId: 'user1'
-        },
-        {
-          id: '2',
-          title: 'To Kill a Mockingbird',
-          author: 'Harper Lee',
-          description: 'The story of young Scout Finch and her father Atticus in a racially divided Alabama town.',
-          imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400',
-          likes: [],
-          creatorId: 'user1'
-        }
-      ];
-      // Save default books to localStorage
-      this.saveBooksToStorage();
-    }
-    this.filterBooks();
-  }
-
-  saveBooksToStorage() {
-    localStorage.setItem('books', JSON.stringify(this.books));
-  }
-
-  filterBooks() {
-    if (!this.searchTerm) {
-      this.filteredBooks = this.books;
-    } else {
-      this.filteredBooks = this.books.filter(book =>
-        book.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(this.searchTerm.toLowerCase())
+      this.books = this.allBooks.filter(book =>
+        book.title.toLowerCase().includes(q) ||
+        book.author.toLowerCase().includes(q)
       );
     }
   }
 
-  toggleLike(book: IBook) {
-    if (!this.currentUser) return;
 
-    const userId = this.currentUser.uid;
-    const likes = book.likes || [];
-    const userLiked = likes.includes(userId);
-
-    if (userLiked) {
-      book.likes = likes.filter(id => id !== userId);
-    } else {
-      book.likes = [...likes, userId];
-    }
-    
-    this.saveBooksToStorage(); // Save to localStorage after like toggle
-  }
-
-  isLiked(book: IBook): boolean {
-    return this.currentUser && book.likes?.includes(this.currentUser.uid) || false;
-  }
-
-  viewDetails(book: IBook) {
-    this.selectedBook = book;
-    this.showDetailsModal = true;
-  }
-
-  closeDetailsModal() {
-    this.showDetailsModal = false;
-    this.selectedBook = null;
-  }
 }

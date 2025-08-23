@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 import { HeaderComponent } from './core/header.component/header.component';
 
@@ -10,10 +10,8 @@ import { HeaderComponent } from './core/header.component/header.component';
   standalone: true,
   imports: [RouterOutlet, HeaderComponent],
 })
-export class AppComponent implements OnInit {
+export class AppComponent  {
   title: string = 'BookShare';
 
-  ngOnInit() {
-    console.log('AppComponent ngOnInit');
-  }
+  
 }
