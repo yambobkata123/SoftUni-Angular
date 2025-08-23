@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { IBook } from '../shared/interfaces/book';
 
 @Injectable({
@@ -18,6 +19,9 @@ export class BookService {
   deleteBook(bookId: string){
     return this.http.post(`/api/themes/${bookId}/delete`,{bookId})
 }
-updateBook(bookId: string, book: IBook) {
-  return this.http.put(`/api/themes/${bookId}/edit`, book);
-}}
+updateBook(bookId: string, book: IBook): Observable<IBook> {
+  return this.http.put<IBook>(`/api/themes/${bookId}`, book);
+}
+};
+
+

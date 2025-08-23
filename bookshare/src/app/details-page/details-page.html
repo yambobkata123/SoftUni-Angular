@@ -4,17 +4,17 @@
       <h3>Book Details</h3>
       <button class="close-btn" (click)="closeDetailsModal()">&times;</button>
     </div>
-    
+
     <div class="book-details" *ngIf="book">
       <div class="book-details-image">
         <img [src]="book.imageUrl || 'assets/default-book.jpg'" [alt]="book.title" />
       </div>
-      
+
       <div class="book-details-info">
         <h2>{{ book.title }}</h2>
         <p class="author-details">by {{ book.author }}</p>
         <p class="description-details">{{ book.description }}</p>
-        
+
         <div class="book-stats">
           <div class="stat">
             <span class="stat-label">Likes:</span>
@@ -25,12 +25,13 @@
             <span class="stat-value">{{ book._id }}</span>
           </div>
         </div>
-        
+
         <div class="book-actions-details">
-          <button 
-            class="like-btn-details like-btn" 
-            [class.liked]="isLiked(book)"
-            (click)="toggleLike(book)"
+          <button
+            class="like-btn-details like-btn"
+            [class.liked]="isLiked"
+            (click)="toggleLike()"
+            [disabled]="!isLoggedIn"
           >
             <span class="icon">❤️</span>
             <span class="label">Like</span>

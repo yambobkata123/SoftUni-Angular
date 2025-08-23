@@ -15,6 +15,8 @@ export class CatalogComponent implements OnInit {
   books: IBook[] = [];
   query: string = '';
   allBooks: IBook[] = [];
+  selectedBook: IBook | null = null;
+  isLiked: boolean = false;
   
 
   constructor(private bookservice: BookService) {}
@@ -38,6 +40,12 @@ export class CatalogComponent implements OnInit {
       );
     }
   }
+  openDetails(book: IBook) {
+    this.selectedBook = book;
+  }
 
+  toggleLike(): void {
+    this.isLiked = !this.isLiked;
+  }
 
 }

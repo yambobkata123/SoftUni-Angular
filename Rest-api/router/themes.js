@@ -8,8 +8,8 @@ const { themeController, postController } = require('../controllers');
 router.get('/', themeController.getThemes);
 router.post('/', auth(), themeController.createTheme);
 router.post('/:bookId/delete', auth(), themeController.deleteTheme);
-router.put('/:bookId/edit', themeController.editPost);
-// router.get('/:bookId/details', themeController.detailsTheme);
+router.post('/:bookId/edit', auth(), themeController.editPost);
+router.get('/:bookId/details', themeController.detailsTheme);
 
 router.get('/:themeId', themeController.getTheme);
 router.post('/:themeId', auth(), postController.createPost);

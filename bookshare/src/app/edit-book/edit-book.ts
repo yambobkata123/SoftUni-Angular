@@ -14,29 +14,34 @@ import { map } from 'rxjs';
   styleUrls: ['./edit-book.css']
 })
 export class EditBook implements OnInit {
-
   books: IBook[] = [];
-  id:string | null = '';
+  id: string | null = null;
+
   constructor(
     private bookservice: BookService,
     private router: Router,
-    private route : ActivatedRoute
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id')
-    
-this.bookservice.getAll().pipe(map((data)=>data.filter(book=>book._id == book._id))).subscribe((data)=>{
-  this.books = data
+    this.id = this.route.snapshot.paramMap.get('id');
   
-})
-}
-  editBook(form: NgForm) {
-    const book: IBook = form.value;
-    book._id = this.id || '';
-    this.bookservice.updateBook(book._id, book).subscribe((data) => {
-      console.log('Book updated successfully:', data);
-      this.router.navigate(['/home']);
+    this.bookservice.getAll().subscribe(data => {
+      this.books = data.filter(book => book._id === this.id);
     });
-  }    
+  }
+
+  editBook(form: NgForm): void {
+    this.bookservice.updateBook(this.id!, form.value).subscribe({
+      next: (data) => {
+        console.log('Book updated successfully:', data);
+        Object.assign(this.books[0], data);  // обновява локалния обект
+        this.router.navigate(['/catalog']);
+      },
+      error: (error) => {
+        console.error('Error updating book:', error);
+      }
+    });
+  }  
 }
+

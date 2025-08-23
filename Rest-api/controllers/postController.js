@@ -34,31 +34,45 @@ function createPost(req, res, next) {
         .catch(next);
 }
 
-function editPost(req, res, next) {
+async function editPost(req, res, next) {
     const { postId } = req.params;
-    const { postText } = req.body;
-    const userId = req.user._id;
-
-    // Проверка дали postId е валиден ObjectId
-    if (!mongoose.Types.ObjectId.isValid(postId)) {
-        return res.status(400).json({ message: "Invalid postId" });
+    const { title, description, imageUrl, author } = req.body;
+    const userId = req.user?._id;
+  
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized: No user' });
     }
-
-    postModel.findOneAndUpdate(
-        { _id: postId, userId: userId },
-        { text: postText },
+  
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({ message: 'Invalid postId format' });
+    }
+  
+    console.log("EDIT ATTEMPT:");
+    console.log("User ID:", userId);
+    console.log("Post ID:", postId);
+    console.log("Update Data:", { title, description, imageUrl, author });
+  
+    try {
+      const updatedPost = await postModel.findOneAndUpdate(
+        { _id: postId, creatorId: userId },  // филтрираме по creatorId
+        { title, description, imageUrl, author },
         { new: true }
-    )
-    .then(updatedPost => {
-        if (!updatedPost) {
-            return res.status(401).json({ message: "Not allowed or post not found" });
-        }
-        res.status(200).json(updatedPost);
-    })
-    .catch(err => {
-        next(err);
-    });
-}
+      );
+  
+      console.log("Updated post:", updatedPost);
+  
+      if (!updatedPost) {
+        return res.status(403).json({ message: 'You are not allowed to edit this post or post not found.' });
+      }
+  
+      res.status(200).json(updatedPost);
+    } catch (err) {
+      next(err);
+    }
+  }
+  
+
+
 
 function deletePost(req, res, next) {
     const { postId, themeId } = req.params;

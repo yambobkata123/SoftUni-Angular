@@ -1,26 +1,36 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IBook } from '../shared/interfaces/book';
 
 @Component({
   selector: 'app-details-page',
-  imports: [],
   templateUrl: './details-page.html',
-  styleUrls: ['./details-page.css']
+  styleUrls: ['./details-page.css'],
+  standalone: true
 })
 export class DetailsPage {
-  @Input() book!: IBook;   // <--- This is REQUIRED for template to access "book"
-
+  @Input() book!: IBook;
+  @Input() isLiked: boolean = false;
+  
+  @Output() likeToggled = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
+  toggleLike(): void {
+    this.likeToggled.emit();
+  }
+
   closeDetailsModal(): void {
-    this.close.emit();
+    this.close.emit(); // известява родителя да скрие модала
   }
 
-  isLiked(book: IBook): boolean {
-    return false;  // Placeholder logic
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('user');
   }
 
-  toggleLike(book: IBook): void {
-    console.log('Like toggled for:', book.title);
+  get userId(): string | null {
+    return localStorage.getItem('user');
+  }
+
+  get isCreator(): boolean {
+    return this.book?.creatorId === this.userId;
   }
 }

@@ -21,12 +21,17 @@
         <h3>{{ book.title }}</h3>
         <p class="author">by {{ book.author }}</p>
         <p class="description">{{ book.description }}</p>
-        <div class="book-actions">
-          <button class="like-btn">
-           Like
-          </button>
-          <button class="details-btn">Details</button>
-        </div>
+<!-- В HTML шаблона -->
+<div class="book-actions">
+  <button 
+    class="like-btn" 
+    (click)="toggleLike()" 
+    [class.liked]="isLiked">
+    {{ isLiked ? 'Unlike' : 'Like' }}
+  </button>
+  <button class="details-btn">Details</button>
+</div>
+
       </div>
     </div>
   </div>

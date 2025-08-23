@@ -55,6 +55,27 @@ function deleteTheme(req, res, next) {
     
 }
 
+async function detailsTheme(req, res, next) {
+    const { bookId } = req.params;
+  
+    if (!bookId) {
+      return res.status(400).json({ message: 'Missing bookId parameter' });
+    }
+  
+    try {
+      const theme = await themeModel.findById(bookId);
+  
+      if (!theme) {
+        return res.status(404).json({ message: 'Theme not found' });
+      }
+  
+      res.status(200).json(theme);
+    } catch (err) {
+      next(err);
+    }
+  }
+  
+
 
 module.exports = {
     getThemes,
@@ -62,5 +83,6 @@ module.exports = {
     getTheme,
     editPost,
     subscribe,
-    deleteTheme
+    deleteTheme,
+    detailsTheme
 }
