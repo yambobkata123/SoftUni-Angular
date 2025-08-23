@@ -20,7 +20,7 @@ export class BookService {
     return this.http.post(`/api/themes/${bookId}/delete`,{bookId})
 }
 updateBook(bookId: string, book: IBook): Observable<IBook> {
-  return this.http.put<IBook>(`/api/themes/${bookId}`, book);
+  return this.http.put<IBook>(`/api/themes/${bookId}/update`, book);
 }
 };
 

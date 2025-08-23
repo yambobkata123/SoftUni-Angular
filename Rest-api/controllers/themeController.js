@@ -74,6 +74,24 @@ async function detailsTheme(req, res, next) {
       next(err);
     }
   }
+
+function updateTheme(req, res, next) {
+    const { themeId } = req.params;
+    const { title, author, description, imageUrl } = req.body;
+
+    themeModel.findByIdAndUpdate(
+        themeId, 
+        { title, author, description, imageUrl }, 
+        { new: true }
+    )
+    .then(updatedTheme => {
+        if (!updatedTheme) {
+            return res.status(404).json({ message: 'Theme not found' });
+        }
+        res.status(200).json(updatedTheme);
+    })
+    .catch(next);
+}
   
 
 
@@ -84,5 +102,6 @@ module.exports = {
     editPost,
     subscribe,
     deleteTheme,
-    detailsTheme
+    detailsTheme,
+    updateTheme
 }

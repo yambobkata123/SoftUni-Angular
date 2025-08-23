@@ -29,7 +29,7 @@
     [class.liked]="isLiked">
     {{ isLiked ? 'Unlike' : 'Like' }}
   </button>
-  <button class="details-btn">Details</button>
+  <button class="details-btn" [routerLink]="['/books', book._id]">Details</button>
 </div>
 
       </div>

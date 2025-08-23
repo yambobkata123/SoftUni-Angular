@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'create-book', component: CreateBookComponent ,canActivate:[isLogged]},
   { path: 'my-books', component: MyBooksComponent,canActivate:[isLogged] },
-  { path: 'details/:id', component: DetailsPage },
+  { path: 'books/:id', component: DetailsPage, canActivate: [isLogged] },
   { path: 'edit-book/:id', component: EditBook,canActivate:[isLogged]},
   { path: 'login', component: LoginComponent,canActivate:[isLoggedNot] },
   { path: 'register', component: RegisterComponent, canActivate: [isLoggedNot] },

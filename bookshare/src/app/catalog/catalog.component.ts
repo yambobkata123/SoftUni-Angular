@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IBook } from '../shared/interfaces/book';
 import { BookService } from '../services/book.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 export class CatalogComponent implements OnInit {
   books: IBook[] = [];

@@ -2,14 +2,14 @@
   <div class="create-book-container">
     <h2>Edit Book</h2>
     
-    <form *ngIf="books.length > 0" #form="ngForm" (ngSubmit)="editBook(form)" class="book-form">
+    <form *ngIf="book" #form="ngForm" (ngSubmit)="editBook(form)" class="book-form">
       <div class="form-group">
         <label for="title">Title *</label>
         <input 
           id="title"
           type="text" 
           placeholder="Enter book title"
-          [(ngModel)]="books[0].title"
+          [(ngModel)]="book.title"
           name="title"
           required
           #inputTitle="ngModel"
@@ -22,7 +22,7 @@
           id="author"
           type="text" 
           placeholder="Enter author name"
-          [(ngModel)]="books[0].author"
+          [(ngModel)]="book.author"
           name="author"
           required
           #inputAuthor="ngModel"
@@ -35,7 +35,7 @@
           id="description"
           placeholder="Enter book description"
           rows="4"
-          [(ngModel)]="books[0].description"
+          [(ngModel)]="book.description"
           name="description"
           required
           #inputDescription="ngModel"
@@ -48,7 +48,7 @@
           id="imageUrl"
           type="url" 
           placeholder="https://example.com/image.jpg"
-          [(ngModel)]="books[0].imageUrl"
+          [(ngModel)]="book.imageUrl"
           name="imageUrl"
           required
           #inputImageUrl="ngModel"
