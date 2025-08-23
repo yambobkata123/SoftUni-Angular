@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } 
 import { Router } from '@angular/router';
 import { IBook } from '../shared/interfaces/book';
 import { AuthService } from '../core/services/auth.service';
+import { BookService } from '../shared/services/book.service';
 
 @Component({
   selector: 'app-create-book',
@@ -18,7 +19,8 @@ export class CreateBookComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private bookService: BookService
   ) {
     this.bookForm = new FormGroup({
       title: new FormControl('', Validators.required),
@@ -39,31 +41,19 @@ export class CreateBookComponent implements OnInit {
 
   addBook() {
     if (this.bookForm.valid && this.currentUser) {
-      const newBook: IBook = {
-        ...this.bookForm.value,
-        id: crypto.randomUUID(),
-        likes: [],
+      const payload = {
+        title: this.bookForm.value.title,
+        author: this.bookForm.value.author,
+        description: this.bookForm.value.description,
+        imageUrl: this.bookForm.value.imageUrl,
         creatorId: this.currentUser.uid
-      };
+      } as Omit<IBook, 'id' | 'likes'>;
 
-      // Load existing books and add new one
-      const existingBooks = this.getBooksFromStorage();
-      existingBooks.push(newBook);
-      this.saveBooksToStorage(existingBooks);
-
-      // Reset form and redirect to catalog
-      this.bookForm.reset();
-      this.router.navigate(['/catalog']);
+      this.bookService.create(payload).subscribe(() => {
+        this.bookForm.reset();
+        this.router.navigate(['/catalog']);
+      });
     }
-  }
-
-  private getBooksFromStorage(): IBook[] {
-    const savedBooks = localStorage.getItem('books');
-    return savedBooks ? JSON.parse(savedBooks) : [];
-  }
-
-  private saveBooksToStorage(books: IBook[]): void {
-    localStorage.setItem('books', JSON.stringify(books));
   }
 
   cancel() {

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { IBook } from '../shared/interfaces/book';
 import { RouterLink } from '@angular/router';
+import { BookService } from '../shared/services/book.service';
 
 @Component({
   selector: 'app-catalog',
@@ -20,50 +21,20 @@ export class CatalogComponent implements OnInit {
   selectedBook: IBook | null = null;
   currentUser: any;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private bookService: BookService) {}
 
   ngOnInit(): void {
-    this.loadBooks();
+    this.fetchBooks();
     this.authService.user$.subscribe(user => {
       this.currentUser = user;
     });
   }
 
-  loadBooks() {
-    // Load books from localStorage or use default data
-    const savedBooks = localStorage.getItem('books');
-    if (savedBooks) {
-      this.books = JSON.parse(savedBooks);
-    } else {
-      // Default books if no saved data
-      this.books = [
-        {
-          id: '1',
-          title: 'The Great Gatsby',
-          author: 'F. Scott Fitzgerald',
-          description: 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.',
-          imageUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400',
-          likes: [],
-          creatorId: 'user1'
-        },
-        {
-          id: '2',
-          title: 'To Kill a Mockingbird',
-          author: 'Harper Lee',
-          description: 'The story of young Scout Finch and her father Atticus in a racially divided Alabama town.',
-          imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400',
-          likes: [],
-          creatorId: 'user1'
-        }
-      ];
-      // Save default books to localStorage
-      this.saveBooksToStorage();
-    }
-    this.filterBooks();
-  }
-
-  saveBooksToStorage() {
-    localStorage.setItem('books', JSON.stringify(this.books));
+  private fetchBooks() {
+    this.bookService.list().subscribe(books => {
+      this.books = books;
+      this.filterBooks();
+    });
   }
 
   filterBooks() {
@@ -79,18 +50,14 @@ export class CatalogComponent implements OnInit {
 
   toggleLike(book: IBook) {
     if (!this.currentUser) return;
-
-    const userId = this.currentUser.uid;
-    const likes = book.likes || [];
-    const userLiked = likes.includes(userId);
-
-    if (userLiked) {
-      book.likes = likes.filter(id => id !== userId);
-    } else {
-      book.likes = [...likes, userId];
-    }
-    
-    this.saveBooksToStorage(); // Save to localStorage after like toggle
+    this.bookService.toggleLike(book.id, this.currentUser.uid).subscribe(updated => {
+      // update the local array with the updated book
+      this.books = this.books.map(b => b.id === updated.id ? updated : b);
+      this.filterBooks();
+      if (this.selectedBook && this.selectedBook.id === updated.id) {
+        this.selectedBook = updated;
+      }
+    });
   }
 
   isLiked(book: IBook): boolean {

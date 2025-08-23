@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IBook } from '../shared/interfaces/book';
 import { AuthService } from '../core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BookService } from '../shared/services/book.service';
 
 @Component({
   selector: 'edit-book',
@@ -14,73 +15,48 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EditBook implements OnInit {
 
-  books: IBook[] = [];
   editingBook: IBook | null = null;
   editModel: Partial<IBook> = {};
+  currentUser: any;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private bookService: BookService
   ) {}
 
   ngOnInit(): void {
-    this.refreshBooks();
+    this.authService.user$.subscribe(u => this.currentUser = u);
     const bookId = this.route.snapshot.paramMap.get('id');
     if (bookId) {
-      this.editingBook = this.books.find(b => b.id === bookId) || null;
-      if (this.editingBook) {
+      this.bookService.get(bookId).subscribe(book => {
+        this.editingBook = book;
         this.editModel = {
-          title: this.editingBook.title,
-          author: this.editingBook.author,
-          description: this.editingBook.description,
-          imageUrl: this.editingBook.imageUrl
+          title: book.title,
+          author: book.author,
+          description: book.description,
+          imageUrl: book.imageUrl
         };
-      }
+      });
     }
   }
 
   cancelEdit(): void {
-    this.router.navigate(['/my-books']); // връщане към списъка
+    this.router.navigate(['/my-books']);
   }
 
   saveEdit(): void {
     if (!this.editingBook) return;
-
-    const all = this.readAllBooks();
-    const idx = all.findIndex(b => b.id === this.editingBook!.id);
-    if (idx !== -1) {
-      all[idx] = {
-        ...all[idx],
-        title: this.editModel.title?.trim() || all[idx].title,
-        author: this.editModel.author?.trim() || all[idx].author,
-        description: this.editModel.description?.trim() || all[idx].description,
-        imageUrl: this.editModel.imageUrl?.trim() || all[idx].imageUrl
-      };
-      this.writeAllBooks(all);
-    }
-
-    this.cancelEdit();
-  }
-
-  private getCurrentUser() {
-    let currentUser: any = null;
-    this.authService.user$.subscribe(u => currentUser = u).unsubscribe();
-    return currentUser;
-  }
-
-  private readAllBooks(): IBook[] {
-    const saved = localStorage.getItem('books');
-    return saved ? JSON.parse(saved) : [];
-  }
-
-  private writeAllBooks(all: IBook[]): void {
-    localStorage.setItem('books', JSON.stringify(all));
-  }
-
-  private refreshBooks(): void {
-    const allBooks = this.readAllBooks();
-    const user = this.getCurrentUser();
-    this.books = user ? allBooks.filter(b => b.creatorId === user.uid) : [];
+    const id = this.editingBook.id;
+    const payload: Partial<IBook> = {
+      title: this.editModel.title?.trim() || this.editingBook.title,
+      author: this.editModel.author?.trim() || this.editingBook.author,
+      description: this.editModel.description?.trim() || this.editingBook.description,
+      imageUrl: (this.editModel.imageUrl || '').toString() || this.editingBook.imageUrl
+    };
+    this.bookService.update(id, payload).subscribe(() => {
+      this.cancelEdit();
+    });
   }
 }
