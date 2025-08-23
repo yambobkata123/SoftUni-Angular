@@ -9,11 +9,11 @@
         <p class="author">by {{ book.author }}</p>
         <p class="description">{{ book.description }}</p>
         <div class="actions">
-          <a class="edit" [routerLink]="['/edit-book', book.id]">Edit</a>
-          <button class="delete" (click)="deleteBook(book)">Delete</button>
+          <a class="edit" [routerLink]="['/edit-book',book._id]">Edit</a>
+          <a class="delete" (click)="deleteBook(book._id)">Delete</a>
           <!-- <button class="details" (click)="showDetailsModal">Details</button> -->
         </div>
-      </div>
+      </div> 
     </div>
   </div>
 
