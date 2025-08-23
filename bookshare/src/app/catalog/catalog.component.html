@@ -4,35 +4,28 @@
     <h2>Book Catalog</h2>
   </div>
 
-  <div class="search-section">
-    <input 
-      type="text" 
-      placeholder="Search books..." 
-      [(ngModel)]="searchTerm"
-      class="search-input"
-    >
-  </div>
+  <input 
+  type="text" 
+  placeholder="Search books..." 
+  class="search-input"
+  [(ngModel)]="query"
+  (input)="onSearch()"
+/>
 
-  <div class="books-grid" *ngIf="filteredBooks.length > 0; else noBooks">
-    <div class="book-card" *ngFor="let book of filteredBooks">
+  <div class="books-grid" *ngIf="books.length > 0; else noBooks">
+    <div class="book-card" *ngFor="let book of books">
       <div class="book-image">
-        <img [src]="book.imageUrl || 'assets/default-book.jpg'" [alt]="book.title">
+        <img src="{{book.imageUrl}}" [alt]="book.title">
       </div>
       <div class="book-info">
         <h3>{{ book.title }}</h3>
         <p class="author">by {{ book.author }}</p>
         <p class="description">{{ book.description }}</p>
         <div class="book-actions">
-          <button 
-            class="like-btn" 
-            [class.liked]="isLiked(book)"
-            (click)="toggleLike(book)"
-          >
-            <span class="icon">❤️</span>
-            <span class="label">Like</span>
-            <span class="count">{{ book.likes.length || 0 }}</span>
+          <button class="like-btn">
+           Like
           </button>
-          <button class="details-btn" (click)="viewDetails(book)">Details</button>
+          <button class="details-btn">Details</button>
         </div>
       </div>
     </div>
@@ -43,49 +36,3 @@
       <p>No books found. Be the first to add a book!</p>
     </div>
   </ng-template>
-
-  <!-- Book Details Modal -->
-  <div class="modal" *ngIf="showDetailsModal" (click)="closeDetailsModal()">
-    <div class="modal-content details-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Book Details</h3>
-        <button class="close-btn" (click)="closeDetailsModal()">&times;</button>
-      </div>
-      
-      <div class="book-details" *ngIf="selectedBook">
-        <div class="book-details-image">
-          <img [src]="selectedBook.imageUrl || 'assets/default-book.jpg'" [alt]="selectedBook.title">
-        </div>
-        
-        <div class="book-details-info">
-          <h2>{{ selectedBook.title }}</h2>
-          <p class="author-details">by {{ selectedBook.author }}</p>
-          <p class="description-details">{{ selectedBook.description }}</p>
-          
-          <div class="book-stats">
-            <div class="stat">
-              <span class="stat-label">Likes:</span>
-              <span class="stat-value">{{ selectedBook.likes.length || 0 }}</span>
-            </div>
-            <div class="stat">
-              <span class="stat-label">Book ID:</span>
-              <span class="stat-value">{{ selectedBook.id }}</span>
-            </div>
-          </div>
-          
-          <div class="book-actions-details">
-            <button 
-              class="like-btn-details like-btn" 
-              [class.liked]="isLiked(selectedBook)"
-              (click)="toggleLike(selectedBook)"
-            >
-              <span class="icon">❤️</span>
-              <span class="label">Like</span>
-              <span class="count">{{ selectedBook.likes.length || 0 }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

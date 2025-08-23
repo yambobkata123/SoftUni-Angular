@@ -1,32 +1,84 @@
-<div class="modal" *ngIf="editingBook">
-    <div class="modal-content">
-      <button class="close-x" (click)="cancelEdit()">×</button>
-      <h3>Edit Book</h3>
-  
+<div class="create-book-page">
+  <div class="create-book-container">
+    <h2>Edit Book</h2>
+    
+    
+    <form #form="ngForm" (ngSubmit)="editBook(form)" class="book-form">
       <div class="form-group">
-        <label>Title:</label>
-        <input type="text" [(ngModel)]="editModel.title" name="title" />
+        <label for="title">Title *</label>
+        <input 
+          id="title"
+          type="text" 
+          placeholder="Enter book title"
+          ngModel
+          value="{{books[0]?.title}}"
+          name="title"
+          required
+          #inputTitle="ngModel"
+        >
+        <!-- <div class="error-message" *ngIf="bookForm.get('title')?.invalid && bookForm.get('title')?.touched">
+          Title is required
+        </div> -->
       </div>
-  
+
       <div class="form-group">
-        <label>Author:</label>
-        <input type="text" [(ngModel)]="editModel.author" name="author" />
+        <label for="author">Author *</label>
+        <input 
+          id="author"
+          type="text" 
+          name="author"
+          value="{{books[0]?.author}}"
+
+          placeholder="Enter author name"
+          ngModel
+          required
+          #inputAuthor="ngModel"
+        >
+        <!-- <div class="error-message" *ngIf="bookForm.get('author')?.invalid && bookForm.get('author')?.touched">
+          Author is required
+        </div> -->
       </div>
-  
+
       <div class="form-group">
-        <label>Description:</label>
-        <textarea [(ngModel)]="editModel.description" name="description"></textarea>
+        <label for="description">Description *</label>
+        <textarea 
+          id="description"
+          placeholder="Enter book description"
+          rows="4"
+          name="description"
+          value="{{books[0]?.description}}"
+
+          ngModel
+          required
+          #inputDescription="ngModel"
+
+        ></textarea>
+        <!-- <div class="error-message" *ngIf="bookForm.get('description')?.invalid && bookForm.get('description')?.touched">
+          Description is required
+        </div> -->
       </div>
-  
+
       <div class="form-group">
-        <label>Image URL:</label>
-        <input type="text" [(ngModel)]="editModel.imageUrl" name="imageUrl" />
+        <label for="imageUrl">Image URL *</label>
+        <input 
+          id="imageUrl"
+          type="url" 
+          placeholder="https://example.com/image.jpg"
+          ngModel
+          required
+          value="{{books[0]?.imageUrl}}"
+
+          name="imageUrl"
+          #inputImageUrl="ngModel"
+        >
+        <!-- <div class="error-message" *ngIf="bookForm.get('imageUrl')?.invalid && bookForm.get('imageUrl')?.touched">
+          Image URL is required
+        </div> -->
       </div>
-  
+
       <div class="form-actions">
-        <button type="button" (click)="cancelEdit()">Cancel</button>
-        <button type="button" class="primary" (click)="saveEdit()">Save</button>
+        <button type="submit" class="btn btn-primary">Edit Book</button>
       </div>
-    </div>
+    </form>
   </div>
-  
+</div> 

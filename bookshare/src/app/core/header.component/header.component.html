@@ -5,25 +5,19 @@
         <a routerLink="/">{{ title }}</a>
       </div>
       
+      
       <div class="nav-links">
         <a routerLink="/">Home</a>
         <a routerLink="/catalog" routerLinkActive="active">Catalog</a>
         <a routerLink="/search" routerLinkActive="active">Search</a>
-        <ng-container *ngIf="authService.user$ | async as user">
-          <a routerLink="/create-book" routerLinkActive="active">Create New Book</a>
-          <a routerLink="/my-books" routerLinkActive="active">My Books</a>
-        </ng-container>
+          <a routerLink="/my-books" routerLinkActive="active" *ngIf="isLoggedIn">My Books</a>
+          <a routerLink="/create-book" routerLinkActive="active" *ngIf="isLoggedIn">Create New Book</a>
       </div>
       
       <div class="nav-auth">
-        <ng-container *ngIf="authService.user$ | async as user; else guestLinks">
-          <span class="user-email">{{ user.email }}</span>
-          <button (click)="logout()" class="logout-btn">Logout</button>
-        </ng-container>
-        <ng-template #guestLinks>
-          <a routerLink="/login" routerLinkActive="active">Login</a>
-          <a routerLink="/register" routerLinkActive="active">Register</a>
-        </ng-template>
+          <button (click)="logout()" class="logout-btn" *ngIf="isLoggedIn">Logout</button>
+          <a routerLink="/login" routerLinkActive="active" *ngIf="!isLoggedIn">Login</a>
+          <a routerLink="/register" routerLinkActive="active" *ngIf="!isLoggedIn">Register</a>
       </div>
     </nav>
   </header>
